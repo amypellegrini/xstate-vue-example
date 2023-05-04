@@ -1,6 +1,6 @@
 # xstate-example
 
-This template should help get you started developing with Vue 3 in Vite.
+Example catalog of Vue 3 + Xstate.
 
 ## Recommended IDE Setup
 

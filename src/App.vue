@@ -1,52 +1,31 @@
-<script setup>
-import { useMachine } from '@xstate/vue'
-import { createMachine } from 'xstate'
+<script>
+import BasicExample from './components/BasicExample.vue'
+import TheWelcome from './components/TheWelcome.vue'
 
-const toggleMachine = createMachine({
-  id: 'toggle',
-  initial: 'inactive',
-  states: {
-    inactive: {
-      on: { TOGGLE: 'active' }
-    },
-    active: {
-      on: { TOGGLE: 'inactive' }
+const routes = {
+  '/': BasicExample
+}
+
+export default {
+  data() {
+    return {
+      currentPath: window.location.hash
     }
+  },
+  computed: {
+    currentView() {
+      return routes[this.currentPath.slice(1) || '/'] || TheWelcome
+    }
+  },
+  mounted() {
+    window.addEventListener('hashchange', () => {
+      this.currentPath = window.location.hash
+    })
   }
-})
-
-const { state, send } = useMachine(toggleMachine)
+}
 </script>
 
 <template>
-  <button @click="send('TOGGLE')">state is: {{ state.value }}</button>
+  <a href="#/">Basic Example</a> | <a href="#/actor">Spawning Actors</a> |
+  <component :is="currentView" />
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
